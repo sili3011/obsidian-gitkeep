@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-gitkeep",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "An obsidian plugin that automatically creates invisible .gitkeep files in empty folders.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
