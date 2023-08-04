@@ -1,6 +1,8 @@
-import { Plugin, TFolder } from "obsidian";
+import { EventRef, Plugin, TAbstractFile, TFolder } from "obsidian";
 
 export default class GitkeepPlugin extends Plugin {
+	createFolderEventRef: EventRef;
+
 	async onload() {
 		if (!this.app.workspace.layoutReady) {
 			this.app.workspace.onLayoutReady(
@@ -10,6 +12,18 @@ export default class GitkeepPlugin extends Plugin {
 			await this.onLayoutReady();
 		}
 		this.app.workspace.onLayoutReady(async () => this.onLayoutReady());
+
+		this.createFolderEventRef = this.app.vault.on(
+			"create",
+			(fileOrFolder) => {
+				if (
+					fileOrFolder.name === "assets" &&
+					fileOrFolder instanceof TFolder
+				) {
+					this.createGitKeep(fileOrFolder);
+				}
+			}
+		);
 	}
 
 	async onLayoutReady() {
@@ -25,8 +39,27 @@ export default class GitkeepPlugin extends Plugin {
 			}
 		}
 
-		if (folder.children.length === 0) {
-			this.app.vault.create(folder.path + "/.gitkeep", "");
+		if (
+			folder.children.length === 0 ||
+			(folder.name === "assets" &&
+				!folder.children?.some((child) => child.name === ".gitkeep"))
+		) {
+			this.createGitKeep(folder);
 		}
+	}
+
+	createGitKeep(fileOrFolder: TAbstractFile) {
+		this.app.vault
+			.create(fileOrFolder.path + "/.gitkeep", "")
+			// surpressing errors if .gitkeep already exists,
+			// which cant be detected as .gitkeep is not part of folder.children
+			.then(
+				(_) => {},
+				(_) => {}
+			);
+	}
+
+	async onunload() {
+		this.app.vault.offref(this.createFolderEventRef);
 	}
 }

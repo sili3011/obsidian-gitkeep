@@ -1,9 +1,9 @@
 {
 	"id": "gitkeep",
 	"name": "Gitkeep",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"minAppVersion": "0.15.0",
-	"description": "An obsidian plugin that automatically creates invisible .gitkeep files in empty folders.",
+	"description": "An obsidian plugin that automatically creates invisible .gitkeep files in empty and assets folders.",
 	"author": "Silvio Schmidt",
 	"authorUrl": "https://github.com/sili3011",
 	"fundingUrl": "https://www.paypal.com/paypalme/sili3011",
